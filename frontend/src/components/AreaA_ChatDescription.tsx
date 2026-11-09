@@ -190,7 +190,7 @@ export const AreaA_ChatDescription: React.FC<AreaAProps> = ({
               fontSize: '11px',
             }}
           >
-            <Compass size={12} />
+            <Compass size={13} color={persona === 'arquiteto' ? '#60a5fa' : '#888'} />
             <span>Arquiteto de Software</span>
           </button>
 
@@ -211,155 +211,151 @@ export const AreaA_ChatDescription: React.FC<AreaAProps> = ({
               fontSize: '11px',
             }}
           >
-            <Cpu size={12} />
+            <Cpu size={13} color={persona === 'engenheiro' ? '#34d399' : '#888'} />
             <span>Engenheiro de Software</span>
           </button>
+
+          {/* Seletor de Modo */}
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: '4px' }}>
+            <button
+              type="button"
+              onClick={() => onModeChange('brainstorm')}
+              style={{
+                fontSize: '11px',
+                padding: '3px 8px',
+                borderRadius: '4px',
+                backgroundColor: activeMode === 'brainstorm' ? '#2563eb' : '#333',
+                color: '#fff',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              Brainstorming RAG
+            </button>
+            <button
+              type="button"
+              onClick={() => onModeChange('direct')}
+              style={{
+                fontSize: '11px',
+                padding: '3px 8px',
+                borderRadius: '4px',
+                backgroundColor: activeMode === 'direct' ? '#2563eb' : '#333',
+                color: '#fff',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              Modelagem Direta
+            </button>
+          </div>
         </div>
 
-        {/* Seletor de Modo */}
-        {!hasProposal && (
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', paddingTop: '2px', fontSize: '12px' }}>
-            <span style={{ color: '#888', fontSize: '11px', fontWeight: 600 }}>MODO:</span>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', color: activeMode === 'brainstorm' ? '#93c5fd' : '#888' }}>
-              <input
-                type="radio"
-                name="chatMode"
-                value="brainstorm"
-                checked={activeMode === 'brainstorm'}
-                onChange={() => onModeChange('brainstorm')}
-              />
-              <span>💡 Brainstorming & RAG (Recomendado)</span>
-            </label>
-
-            <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', color: activeMode === 'direct' ? '#93c5fd' : '#888' }}>
-              <input
-                type="radio"
-                name="chatMode"
-                value="direct"
-                checked={activeMode === 'direct'}
-                onChange={() => onModeChange('direct')}
-              />
-              <span>⚡ Modelagem Direta</span>
-            </label>
-          </div>
-        )}
-
         {/* Badges de Progresso do Fluxograma */}
-        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', paddingTop: '4px' }}>
-          <span style={{
-            fontSize: '10.5px',
-            padding: '2px 8px',
-            borderRadius: '10px',
-            backgroundColor: prerequisites?.sigla ? '#14532d' : '#27272a',
-            color: prerequisites?.sigla ? '#86efac' : '#71717a',
-            border: prerequisites?.sigla ? '1px solid #22c55e' : '1px solid #3f3f46'
-          }}>
-            {prerequisites?.sigla ? `✓ Sigla: ${prerequisites.sigla.toUpperCase()}` : '○ Sigla: Pendente'}
+        <div style={{ display: 'flex', gap: '6px', fontSize: '10px', color: '#aaa', paddingTop: '4px', flexWrap: 'wrap', alignItems: 'center' }}>
+          <span style={{ padding: '2px 6px', background: '#1e293b', borderRadius: '4px' }}>1. Escopo</span>
+          <span>→</span>
+          <span style={{ padding: '2px 6px', background: prerequisites?.sigla ? '#065f46' : '#1e293b', borderRadius: '4px', color: prerequisites?.sigla ? '#6ee7b7' : '#aaa' }}>
+            2. Sigla/Feature/ARQCOR
           </span>
-
-          <span style={{
-            fontSize: '10.5px',
-            padding: '2px 8px',
-            borderRadius: '10px',
-            backgroundColor: prerequisites?.feature ? '#14532d' : '#27272a',
-            color: prerequisites?.feature ? '#86efac' : '#71717a',
-            border: prerequisites?.feature ? '1px solid #22c55e' : '1px solid #3f3f46'
-          }}>
-            {prerequisites?.feature ? '✓ Feature: OK' : '○ Feature: Pendente'}
+          <span>→</span>
+          <span style={{ padding: '2px 6px', background: activeMode === 'brainstorm' ? '#1e3a8a' : '#1e293b', borderRadius: '4px', color: activeMode === 'brainstorm' ? '#93c5fd' : '#aaa' }}>
+            3. Brainstorm RAG
           </span>
-
-          <span style={{
-            fontSize: '10.5px',
-            padding: '2px 8px',
-            borderRadius: '10px',
-            backgroundColor: prerequisites?.arqcor ? '#14532d' : '#27272a',
-            color: prerequisites?.arqcor ? '#86efac' : '#71717a',
-            border: prerequisites?.arqcor ? '1px solid #22c55e' : '1px solid #3f3f46'
-          }}>
-            {prerequisites?.arqcor ? `✓ ARQCOR: ${prerequisites.arqcor}` : '○ ARQCOR: Pendente'}
+          <span>→</span>
+          <span style={{ padding: '2px 6px', background: hasProposal ? '#065f46' : '#1e293b', borderRadius: '4px', color: hasProposal ? '#6ee7b7' : '#aaa' }}>
+            4. Preview & Validação
           </span>
+          <span>→</span>
+          <span style={{ padding: '2px 6px', background: '#1e293b', borderRadius: '4px' }}>5. XML Archi</span>
         </div>
       </div>
 
-      <div className="chat-messages">
+      <div className="chat-messages-container">
         {messages.length === 0 ? (
           <div className="chat-empty-state">
-            <Bot size={40} className="text-muted" />
+            <Bot size={36} className="text-muted" />
+            <h4>Olá! Sou o {personaLabel}.</h4>
             <p>
-              Olá! Sou o seu <strong>{personaLabel}</strong>.
+              Estou conectado ao <strong>RAG de Arquitetura do Banco BV</strong> para pesquisar padrões corporativos,
+              definir esteiras de dados e gerar desenhos oficiais para o <strong>Archi</strong>.
             </p>
-            <p className="text-secondary text-sm">
-              {activeMode === 'brainstorm'
-                ? 'Estou pronto para debater ideias inovadoras de arquitetura, consultar a base de conhecimento de tecnologia do BV e estruturar sua solução sob medida.'
-                : 'Descreva a necessidade do seu sistema informando Sigla (4 letras), Feature e ARQCOR para iniciarmos a modelagem oficial ArchiMate.'}
+            <p style={{ fontSize: '12px', color: '#64748b' }}>
+              Para começarmos, informe os <strong>3 pré-requisitos corporativos</strong>:{' '}
+              <strong>Sigla do projeto (4 letras)</strong>, <strong>Feature</strong> e <strong>ARQCOR</strong>.
             </p>
+            <div className="chat-suggestions">
+              <span className="suggestion-label">Exemplos rápidos:</span>
+              <button
+                type="button"
+                className="chip-btn"
+                onClick={() => onSendMessage(EXAMPLE_PROMPT)}
+                disabled={isLoading}
+              >
+                🌱 Exemplo Completo (SESG — Risco Ambiental com PubSub e GCS)
+              </button>
+              <button
+                type="button"
+                className="chip-btn"
+                onClick={() =>
+                  onSendMessage(
+                    'Sigla: CRDT\nFeature: Análise de concessão de crédito com agente GenAI no GKE, PubSub e bucket GCS\nARQCOR: ARQ-8890'
+                  )
+                }
+                disabled={isLoading}
+              >
+                🤖 Crédito com GenAI, PubSub e GCS (CRDT)
+              </button>
+            </div>
           </div>
         ) : (
-          messages.map((msg) => (
-            <div
-              key={msg.id}
-              className={`chat-bubble ${
-                msg.role === 'user'
-                  ? 'chat-bubble-user'
-                  : msg.role === 'assistant'
-                  ? 'chat-bubble-assistant'
-                  : 'chat-bubble-system'
-              }`}
-            >
-              <div className="chat-bubble-header">
-                <div className="chat-bubble-author">
-                  {msg.role === 'user' ? (
-                    <User size={13} />
-                  ) : msg.role === 'assistant' ? (
-                    persona === 'engenheiro' ? <Cpu size={13} color="#10b981" /> : <Compass size={13} color="#60a5fa" />
-                  ) : (
-                    <Bot size={13} />
-                  )}
-                  <span>
-                    {msg.role === 'user'
-                      ? 'Você'
-                      : msg.role === 'assistant'
-                      ? personaLabel
-                      : 'Sistema'}
+          <div className="chat-history">
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`chat-bubble-wrapper ${
+                  msg.role === 'user' ? 'bubble-user' : 'bubble-assistant'
+                }`}
+              >
+                <div className="bubble-avatar">
+                  {msg.role === 'user' ? <User size={15} /> : <Bot size={15} />}
+                </div>
+                <div className="bubble-content">
+                  <div className="bubble-header">
+                    <span className="bubble-author">
+                      {msg.role === 'user' ? 'Você' : personaLabel}
+                    </span>
+                    <span className="bubble-time">{msg.timestamp}</span>
+                  </div>
+                  <div className="bubble-text" style={{ whiteSpace: 'pre-wrap' }}>{msg.content}</div>
+                </div>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="chat-bubble-wrapper bubble-assistant">
+                <div className="bubble-avatar">
+                  <Bot size={15} />
+                </div>
+                <div className="bubble-content bubble-loading">
+                  <div className="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                  <span className="loading-text">
+                    {personaLabel} pesquisando no RAG e analisando requisitos...
                   </span>
                 </div>
-                {msg.timestamp && (
-                  <span className="chat-bubble-time">{msg.timestamp}</span>
-                )}
               </div>
-              <div className="chat-bubble-content">
-                {msg.content.split('\n').map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
-              </div>
-            </div>
-          ))
-        )}
-
-        {isLoading && (
-          <div className="chat-bubble chat-bubble-assistant">
-            <div className="chat-bubble-header">
-              <div className="chat-bubble-author">
-                <Bot size={13} />
-                <span>{personaLabel} pensando...</span>
-              </div>
-            </div>
-            <div className="chat-bubble-content">
-              <div className="typing-indicator">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
+            )}
           </div>
         )}
       </div>
 
       {/* Chamada para Ação: Pronto para Modelagem no modo Brainstorming */}
       {activeMode === 'brainstorm' && (isReadyForModeling || messages.length >= 2) && onTriggerModeling && !hasProposal && (
-        <div style={{ padding: '8px 12px', background: '#1e3a8a22', borderTop: '1px solid #1e3a8a', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#93c5fd' }}>
-            <CheckCircle2 size={16} color="#60a5fa" />
+        <div style={{ padding: '8px 12px', background: '#eff6ff', borderTop: '1px solid #bfdbfe', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#1e40af', fontWeight: 500 }}>
+            <CheckCircle2 size={16} color="#2563eb" />
             <span>Refinamento alinhado? Pronto para gerar o modelo ArchiMate.</span>
           </div>
           <button

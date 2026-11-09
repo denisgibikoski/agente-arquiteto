@@ -248,6 +248,18 @@ async def export_json(model: ArchiMateModel):
 async def export_xml(model: ArchiMateModel):
     """Exports The Open Group ArchiMate Model Exchange File Format (.xml / .archimate)."""
     xml_str = ArchiMateExporter.to_opengroup_xml(model)
+    filename = f"{model.identifier or 'archimate_model'}.xml"
+    return Response(
+        content=xml_str,
+        media_type="application/xml",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+    )
+
+
+@router.post("/architecture/export/archi")
+async def export_archi(model: ArchiMateModel):
+    """Exports Native Archi Tool Format (.archimate) for direct opening via File -> Open."""
+    xml_str = ArchiMateExporter.to_archi_native(model)
     filename = f"{model.identifier or 'archimate_model'}.archimate"
     return Response(
         content=xml_str,

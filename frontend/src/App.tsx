@@ -28,6 +28,7 @@ import {
   brainstormArchitecture,
   downloadJsonModel,
   downloadXmlModel,
+  downloadArchiModel,
   fetchFinOpsSummary,
   resetFinOpsMetrics,
 } from './services/api'
@@ -431,6 +432,12 @@ export const App: React.FC = () => {
     }
   }
 
+  const handleDownloadArchi = () => {
+    if (archimateModel) {
+      downloadArchiModel(archimateModel).catch((err) => alert(err.message))
+    }
+  }
+
   const handleDownloadXml = () => {
     if (archimateModel) {
       downloadXmlModel(archimateModel).catch((err) => alert(err.message))
@@ -510,6 +517,7 @@ export const App: React.FC = () => {
             onDownloadPng={handleDownloadPng}
             onDownloadJson={handleDownloadJson}
             onDownloadXml={handleDownloadXml}
+            onDownloadArchi={handleDownloadArchi}
             onReset={handleReset}
           />
         </div>

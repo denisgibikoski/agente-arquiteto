@@ -1,8 +1,7 @@
-"""Testes para o serviço exportador do ArchiMate (JSON e Open Group XML)."""
+"""Testes para o serviço exportador do ArchiMate (JSON, Open Group XML e Archi Nativo)."""
 
 import json
 import xml.etree.ElementTree as ET
-import pytest
 from app.services.architect_agent import ArchitectAgent
 from app.services.exporter import ArchiMateExporter
 
@@ -27,9 +26,13 @@ def test_export_json_and_xml_consistency():
         assert "type" in elem_dict
         assert "layer" in elem_dict
 
-    # 2. Teste de exportação Open Group XML
+    # 2. Teste de exportação Open Group XML (.xml)
     xml_str = ArchiMateExporter.to_opengroup_xml(model)
     assert xml_str.startswith('<?xml version="1.0" encoding="UTF-8"?>')
+    assert "<propertyDefinitions>" in xml_str
+    assert 'propertyDefinitionRef="propdef-' in xml_str
+    assert 'xsi:type="Element"' in xml_str
+    assert 'xsi:type="Relationship"' in xml_str
 
     # Faz o parsing do XML para certificar a sintaxe XML válida
     root = ET.fromstring(xml_str.replace('<?xml version="1.0" encoding="UTF-8"?>', '').strip())
@@ -40,3 +43,11 @@ def test_export_json_and_xml_consistency():
     elements_xml = root.find("{http://www.opengroup.org/xsd/archimate/3.0/}elements")
     assert elements_xml is not None
     assert len(elements_xml) == len(model.elements)
+
+    # 3. Teste de exportação Nativa Archi (.archimate)
+    archi_str = ArchiMateExporter.to_archi_native(model)
+    assert archi_str.startswith('<?xml version="1.0" encoding="UTF-8"?>')
+    assert 'xmlns:archimate="http://www.archimatetool.com/archimate"' in archi_str
+    assert "<archimate:model" in archi_str
+    assert 'xsi:type="archimate:ArchimateDiagramModel"' in archi_str
+    assert 'xsi:type="archimate:DiagramObject"' in archi_str

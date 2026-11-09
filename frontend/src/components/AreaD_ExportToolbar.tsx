@@ -27,6 +27,7 @@ interface AreaDProps {
   onDownloadPng: () => void
   onDownloadJson: () => void
   onDownloadXml: () => void
+  onDownloadArchi?: () => void
   onReset: () => void
 }
 
@@ -42,6 +43,7 @@ export const AreaD_ExportToolbar: React.FC<AreaDProps> = ({
   onDownloadPng,
   onDownloadJson,
   onDownloadXml,
+  onDownloadArchi,
   onReset,
 }) => {
   const hasDiagram = Boolean(svgMarkup && model)
@@ -106,7 +108,7 @@ export const AreaD_ExportToolbar: React.FC<AreaDProps> = ({
               onClick={onRequestAdjustments}
               disabled={isProcessing}
               className="btn-secondary"
-              style={{ borderColor: '#f59e0b', color: '#fbbf24', display: 'flex', alignItems: 'center', gap: '6px' }}
+              style={{ borderColor: '#f59e0b', color: '#d97706', display: 'flex', alignItems: 'center', gap: '6px' }}
               title="Solicitar alterações retornando para o chat com a Persona"
             >
               <RotateCcw size={15} />
@@ -150,11 +152,23 @@ export const AreaD_ExportToolbar: React.FC<AreaDProps> = ({
               onClick={onDownloadXml}
               disabled={!hasDiagram || isProcessing}
               className="btn-secondary"
-              title="Baixar formato The Open Group ArchiMate Model Exchange (XML compatível com Archi)"
+              title="Importar no Archi via: File -> Import -> Model from Open Exchange File... (.xml)"
             >
               <FileDown size={15} />
-              <span>Baixar XML (Archi)</span>
+              <span>Baixar XML (Open Exchange)</span>
             </button>
+
+            {onDownloadArchi && (
+              <button
+                onClick={onDownloadArchi}
+                disabled={!hasDiagram || isProcessing}
+                className="btn-secondary"
+                title="Abrir diretamente no Archi via: File -> Open... (.archimate)"
+              >
+                <FileDown size={15} />
+                <span>Baixar Archi (.archimate)</span>
+              </button>
+            )}
           </div>
 
           {/* Botão de Reinício */}

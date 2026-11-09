@@ -14,6 +14,7 @@ from app.api.routes import (
     approve_architecture,
     export_json,
     export_xml,
+    export_archi,
 )
 from app.models.chat import (
     AnalyzeRequest,
@@ -155,3 +156,10 @@ def test_api_analyze_refine_approve_and_export_flow():
     xml_str = xml_resp.body.decode("utf-8")
     assert '<?xml version="1.0" encoding="UTF-8"?>' in xml_str
     assert "www.opengroup.org/xsd/archimate/3.0/" in xml_str
+    assert '.xml"' in xml_resp.headers["content-disposition"]
+    assert "<propertyDefinitions>" in xml_str
+
+    archi_resp = run_sync(export_archi(model))
+    archi_str = archi_resp.body.decode("utf-8")
+    assert "www.archimatetool.com/archimate" in archi_str
+    assert '.archimate"' in archi_resp.headers["content-disposition"]

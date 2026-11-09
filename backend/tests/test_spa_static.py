@@ -1,5 +1,6 @@
 """Testes de segurança da rota catch-all da SPA (path traversal)."""
 
+import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from app.main import montar_frontend, resolver_arquivo_spa

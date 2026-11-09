@@ -138,13 +138,31 @@ export async function downloadXmlModel(model: ArchiMateModel): Promise<void> {
   const url = window.URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  a.download = `${model.identifier || 'archimate_model'}.archimate`
+  a.download = `${model.identifier || 'archimate_model'}.xml`
   document.body.appendChild(a)
   a.click()
   document.body.removeChild(a)
   window.URL.revokeObjectURL(url)
 }
 
+
+export async function downloadArchiModel(model: ArchiMateModel): Promise<void> {
+  const res = await fetch(`${API_BASE}/architecture/export/archi`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(model),
+  })
+  if (!res.ok) throw new Error('Falha ao exportar modelo nativo Archi (.archimate)')
+  const blob = await res.blob()
+  const url = window.URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${model.identifier || 'archimate_model'}.archimate`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  window.URL.revokeObjectURL(url)
+}
 
 export async function fetchFinOpsSummary(): Promise<import('../types/archimate').FinOpsSummary> {
   const res = await fetch(`${API_BASE}/observability/finops/summary`)
